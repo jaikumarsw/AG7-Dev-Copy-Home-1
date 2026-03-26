@@ -4,7 +4,6 @@ import { Card, CardContent } from "@/components/ui/card";
 const statItems = [
   { value: "0", label: "Active" },
   { value: "0", label: "Ongoing" },
-  { value: "0", label: "Done" },
 ];
 
 export const SidebarNavigationSection = (): JSX.Element => {
