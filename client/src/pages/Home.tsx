@@ -1,5 +1,4 @@
 import { DashboardMainSection } from "./sections/DashboardMainSection";
-import { SidebarNavigationSection } from "./sections/SidebarNavigationSection";
 
 export const Home = (): JSX.Element => {
   return (
@@ -21,12 +20,8 @@ export const Home = (): JSX.Element => {
       {/* Orange glow effect */}
       <div className="absolute top-9 left-[calc(50.00%_-_156px)] w-[100px] h-[100px] bg-[#ff7439] rounded-[50px] blur-[100px] z-0 pointer-events-none" />
 
-      {/* Main layout: sidebar + content */}
+      {/* Main layout */}
       <div className="flex w-full min-h-[1031px] relative z-10">
-        {/* Sidebar */}
-        <SidebarNavigationSection />
-
-        {/* Right side: top nav + main content */}
         <div className="flex flex-col flex-1">
           {/* Top navigation bar */}
           <header className="flex w-full items-center justify-between px-6 py-6 h-[72px]">
