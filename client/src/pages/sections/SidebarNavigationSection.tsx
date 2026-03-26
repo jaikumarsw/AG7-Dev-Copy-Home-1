@@ -2,7 +2,6 @@ import { Card, CardContent } from "@/components/ui/card";
 
 // Stat items data for the navigation stats section
 const statItems = [
-  { value: "0", label: "Ongoing" },
 ];
 
 export const SidebarNavigationSection = (): JSX.Element => {
