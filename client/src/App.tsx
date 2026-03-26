@@ -12,6 +12,7 @@ import { AppsPage } from "@/pages/AppsPage";
 import { MessagesPage } from "@/pages/MessagesPage";
 import { TasksPage } from "@/pages/TasksPage";
 import { AIPage } from "@/pages/AIPage";
+import { SettingsPage } from "@/pages/SettingsPage";
 
 function Router() {
   return (
@@ -23,6 +24,7 @@ function Router() {
         <Route path="/messages" component={MessagesPage} />
         <Route path="/tasks" component={TasksPage} />
         <Route path="/ai" component={AIPage} />
+        <Route path="/settings" component={SettingsPage} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

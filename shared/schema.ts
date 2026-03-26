@@ -93,6 +93,43 @@ export const insertLifeAreaSchema = createInsertSchema(lifeAreas)
 export type InsertLifeArea = z.infer<typeof insertLifeAreaSchema>;
 export type LifeArea = typeof lifeAreas.$inferSelect;
 
+// Messages / Conversations
+export const conversations = pgTable("conversations", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  avatarInitials: text("avatar_initials").notNull().default(""),
+  avatarColor: text("avatar_color").notNull().default("#ff7539"),
+  lastMessage: text("last_message").notNull().default(""),
+  lastMessageAt: text("last_message_at").notNull(),
+  unreadCount: integer("unread_count").notNull().default(0),
+});
+
+export const insertConversationSchema = createInsertSchema(conversations)
+  .omit({ id: true })
+  .extend({
+    lastMessageAt: z.string().datetime({ message: "lastMessageAt must be an ISO datetime" }),
+  });
+export type InsertConversation = z.infer<typeof insertConversationSchema>;
+export type Conversation = typeof conversations.$inferSelect;
+
+export const messages = pgTable("messages", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  conversationId: varchar("conversation_id").notNull(),
+  senderName: text("sender_name").notNull(),
+  content: text("content").notNull(),
+  sentAt: text("sent_at").notNull(),
+  isOwn: integer("is_own").notNull().default(0),
+});
+
+export const insertMessageSchema = createInsertSchema(messages)
+  .omit({ id: true })
+  .extend({
+    sentAt: z.string().datetime({ message: "sentAt must be an ISO datetime" }),
+    isOwn: z.number().int().min(0).max(1).default(0),
+  });
+export type InsertMessage = z.infer<typeof insertMessageSchema>;
+export type Message = typeof messages.$inferSelect;
+
 // Metrics
 export const metrics = pgTable("metrics", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),

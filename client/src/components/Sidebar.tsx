@@ -49,7 +49,9 @@ export const Sidebar = (): JSX.Element => {
         <button
           data-testid="sidebar-settings"
           title="Settings"
+          onClick={() => navigate("/settings")}
           className="flex items-center justify-center w-12 h-12 rounded-full transition-all duration-200 hover:bg-white/10"
+          style={location === "/settings" ? { background: "linear-gradient(180deg,#E97334,#CC4130)" } : {}}
         >
           <Settings size={22} color="white" strokeWidth={1.5} opacity={0.9} />
         </button>

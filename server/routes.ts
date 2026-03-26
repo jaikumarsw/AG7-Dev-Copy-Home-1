@@ -7,6 +7,8 @@ import {
   insertNoteSchema,
   insertMainGoalSchema,
   insertLifeAreaSchema,
+  insertConversationSchema,
+  insertMessageSchema,
   insertMetricsSchema,
 } from "@shared/schema";
 import { z } from "zod";
@@ -162,6 +164,46 @@ export async function registerRoutes(
   app.delete("/api/life-areas/:id", async (req, res) => {
     await storage.deleteLifeArea(req.params.id);
     res.status(204).send();
+  });
+
+  // ── Conversations ──────────────────────────────────────────────────────────
+  app.get("/api/conversations", async (_req, res) => {
+    res.json(await storage.getConversations());
+  });
+
+  app.post("/api/conversations", async (req, res) => {
+    const parsed = insertConversationSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
+    res.status(201).json(await storage.createConversation(parsed.data));
+  });
+
+  app.patch("/api/conversations/:id", async (req, res) => {
+    const parsed = insertConversationSchema.partial().safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
+    const conv = await storage.updateConversation(req.params.id, parsed.data);
+    if (!conv) return res.status(404).json({ error: "Not found" });
+    res.json(conv);
+  });
+
+  // ── Messages ───────────────────────────────────────────────────────────────
+  app.get("/api/conversations/:id/messages", async (req, res) => {
+    res.json(await storage.getMessages(req.params.id));
+  });
+
+  app.post("/api/conversations/:id/messages", async (req, res) => {
+    const parsed = insertMessageSchema.safeParse({
+      ...req.body,
+      conversationId: req.params.id,
+    });
+    if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
+    const msg = await storage.createMessage(parsed.data);
+    // Update conversation last message
+    await storage.updateConversation(req.params.id, {
+      lastMessage: parsed.data.content,
+      lastMessageAt: parsed.data.sentAt,
+      unreadCount: 0,
+    });
+    res.status(201).json(msg);
   });
 
   // ── Metrics ────────────────────────────────────────────────────────────────
